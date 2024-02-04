@@ -2,7 +2,7 @@
 """
 starts a new flask app
 """
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, abort
 from auth import Auth
 
 
