@@ -42,14 +42,13 @@ def login():
 
 @app.route('/sessions', methods=['DELETE'], strict_slashes=False)
 def logout():
-    """log out users
-    """
-    session_id = request.cookies.get('session_id')
+    """log out users"""
+    session_id = request.cookies.get("session_id")
     if session_id:
         user = AUTH.get_user_from_session_id(session_id)
         if user:
             AUTH.destroy_session(user.id)
-            return redirect('/')
+            return redirect("/")
     abort(403)
 
 
@@ -62,6 +61,17 @@ def profile():
         if user:
             return jsonify({"email": user.email}), 200
     abort(403)
+
+
+@app.route('/reset_password', methods=['POST'], strict_slashes=False)
+def get_reset_password_token():
+    """Get reset password token"""
+    try:
+        email = request.form.get('email')
+        token = AUTH.get_reset_password_token(email)
+        return jsonify({"email": email, "reset_token": token}), 200
+    except ValueError:
+        abort(403)
 
 
 if __name__ == "__main__":
